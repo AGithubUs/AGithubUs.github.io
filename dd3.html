@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>M3U8 Playlist Player</title>
+  <style>
+    body {
+      background: #111;
+      color: #eee;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    video {
+      width: 80%;
+      max-width: 800px;
+      border: 2px solid #00ffe0;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    select {
+      padding: 10px;
+      font-size: 1rem;
+      background: #222;
+      color: #fff;
+      border: 1px solid #00ffe0;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎥 M3U8 Playlist Player</h1>
+  <video id="video" controls autoplay muted></video>
+  <br>
+  <label for="playlist">Choose a stream:</label>
+  <select id="playlist">
+    <option value="https://i.mjh.nz/.r/seven-per.m3u8">Channel 7</option>
+    <option value="https://i.mjh.nz/.r/channel-9-wa.m3u8">Channel 9</option>
+    <option value="https://i.mjh.nz/.r/7mate-per.m3u8">7 Mate</option>
+    <option value="https://127.0.0.1:8000.m3u8">Inv</option>
+  </select>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    const video = document.getElementById('video');
+    const playlist = document.getElementById('playlist');
+
+    function loadStream(url) {
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+      }
+    }
+
+    playlist.addEventListener('change', () => {
+      loadStream(playlist.value);
+    });
+
+    // Load initial stream
+    loadStream(playlist.value);
+  </script>
+</body>
+</html>
